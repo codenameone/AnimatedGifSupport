@@ -16,3 +16,9 @@ hi.show();
 ````
 
 Notice that you need to pass in the length of the input stream that is decoded when opening a gif.
+
+## Changelog
+### 2017-12-25
+#### Modified
+- Loop checking inside animate() function yields sensible results for finite looped gifs.
+- Animate function no longer skips last frame.
