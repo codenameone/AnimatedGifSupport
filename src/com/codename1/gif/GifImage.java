@@ -35,9 +35,9 @@ import java.util.ArrayList;
 /**
  * <p>This is a GIF image implementation based on the code from https://gist.github.com/devunwired/4479231
  * To use this just use  {@code Image img = GifImage.decode(inputStream, lengthOfStream); }
- * You can then use the image as any other Codename One image. Looping, timing etc. is determined by 
+ * You can then use the image as any other Codename One image. Looping, timing etc. is determined by
  * the internal loop definitions in the GIF.</p>
- * 
+ *
  * <p>
  * Reads frame data from a GIF image source and decodes it into individual frames
  * for animation purposes.  Image data can be read from either and InputStream source
@@ -159,7 +159,7 @@ public class GifImage extends Image {
     private GifImage() {
         super(null);
     }
-    
+
     /**
      * Move the animation frame counter forward
      */
@@ -804,7 +804,7 @@ public class GifImage extends Image {
             readBlock();
         } while ((blockSize > 0) && !err());
     }
-    
+
     public static GifImage decode(InputStream is, int contentLength) throws IOException {
         final GifImage gifimg = new GifImage();
         int ec = gifimg.read(is, contentLength);
@@ -821,11 +821,11 @@ public class GifImage extends Image {
             gifimg.frameTimes[i] = currentTime;
             currentTime  += gifimg.getDelay(i);
         }
-        
+
         gifimg.duration = currentTime;
         gifimg.actualWidth = gifimg.frameImages[0].getWidth();
         gifimg.actualHeight = gifimg.frameImages[0].getHeight();
-        
+
         return gifimg;
     }
 
@@ -869,30 +869,39 @@ public class GifImage extends Image {
 
     @Override
     public boolean animate() {
-        if(startTime < 0) {
-            startTime = System.currentTimeMillis();
-        }
-        int time = (int)(System.currentTimeMillis() - startTime);
-        if(loopCount > 0) {
-            if(time % duration > loopCount) {
-                return false;
-            }
-        }
-        time %= duration;
-        int newFrame = 0;
-        for(int iter = 0 ; iter < frameTimes.length ; iter++) {
-            if(frameTimes[iter] > time) {
-                newFrame = iter - 1;
-                break;
-            }
-        }
-        if(newFrame != frame) {
-            frame = newFrame;
-            return true;
-        }
-        return false;
+      if(startTime < 0) {
+          startTime = System.currentTimeMillis();
+      }
+
+      int time = (int)(System.currentTimeMillis() - startTime);
+      if(loopCount > 0) {
+          if(time > loopCount*duration) {
+              return false;
+          }
+      }
+
+      time %= duration;
+      int newFrame = 0;
+      for(int iter = 0 ; iter < frameTimes.length ; iter++) {
+          if(frameTimes[iter] > time) {
+              newFrame = iter - 1;
+              break;
+          }
+      }
+<<<<<<< HEAD
+      if(time >= frameTimes[frameTimes.length-1])
+=======
+      if(time > frameTimes[frameTimes.length-1])
+>>>>>>> d9f8b04baacaee1f3e97ca98a30cb7f0de6e61b4
+        newFrame = frameCount - 1;
+
+      if(newFrame != frame) {
+          frame = newFrame;
+          return true;
+      }
+      return false;
     }
-    
+
     static class ByteBuffer {
         static final int UNSET_MARK = -1;
         final byte[] backingArray;
@@ -903,7 +912,7 @@ public class GifImage extends Image {
         public ByteBuffer(byte[] b) {
             backingArray = b;
         }
-        
+
         public final ByteBuffer rewind() {
             position = 0;
             mark = UNSET_MARK;
@@ -926,11 +935,11 @@ public class GifImage extends Image {
                 mark = UNSET_MARK;
             }
         }
-        
+
         public final byte get() {
           return backingArray[position++];
         }
-        
+
         public final ByteBuffer get(byte[] dst, int dstOffset, int byteCount) {
             System.arraycopy(backingArray, position, dst, dstOffset, byteCount);
             position += byteCount;
@@ -944,7 +953,7 @@ public class GifImage extends Image {
         public final int position() {
             return position;
         }
-        
+
         public final short getShort() {
             int newPosition = position + 2; //SizeOf.SHORT;
             short result = (short) ((backingArray[position + 1] << 8) | (backingArray[position] & 0xff));
