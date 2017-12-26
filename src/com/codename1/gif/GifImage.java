@@ -888,13 +888,8 @@ public class GifImage extends Image {
               break;
           }
       }
-<<<<<<< HEAD
       if(time >= frameTimes[frameTimes.length-1])
-=======
-      if(time > frameTimes[frameTimes.length-1])
->>>>>>> d9f8b04baacaee1f3e97ca98a30cb7f0de6e61b4
-        newFrame = frameCount - 1;
-
+         newFrame = frameCount - 1;
       if(newFrame != frame) {
           frame = newFrame;
           return true;
